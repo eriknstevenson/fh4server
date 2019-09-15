@@ -1,0 +1,24 @@
+version: "3"
+services:
+  influxdb:
+    restart: unless-stopped
+    image: quay.io/influxdb/influxdb:2.0.0-alpha
+    volumes:
+      - influxdb:/var/lib/influxdb
+    environment:
+      - INFLUXDB_DATABASE=fh4
+    # TODO: Should only have this set for development in order to access the UI
+    ports:
+      # OUTSIDE | INSIDE
+      - 9999:9999 # WEB UI
+
+  fh4server:
+    restart: unless-stopped
+    build: .
+    image: fh4server:latest
+    ports:
+      # OUTSIDE | INSIDE
+      - 10001:10001/udp
+
+volumes:
+  influxdb:
